@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 # Create your models here.
 
 class Post(models.Model):
@@ -24,6 +25,7 @@ class Post(models.Model):
         return self.title
 
 class Comment(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     post=models.ForeignKey('blog.Post', related_name='comments')
     author=models.CharField(max_length=200)
     text=models.TextField()

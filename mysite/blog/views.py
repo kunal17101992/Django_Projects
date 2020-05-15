@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import (TemplateView,ListView,DetailView,CreateView,UpdateView,DeleteView)
+#from django.contrib.auth.models import User
 # Create your views here.
 
 class AboutView(TemplateView):
@@ -59,6 +60,9 @@ def add_comment_to_post(request,pk):
         if form.is_valid():
             comment = form.save(commit=False)
             comment.post = post
+            if request.user == comment.post.author:
+                comment.approve_comment = True
+            comment.author=request.user.get_username()
             comment.save()
             return redirect('post_detail', pk=post.pk)
     else:

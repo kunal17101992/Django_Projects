@@ -9,6 +9,9 @@
             <div class="date postdate">
                 {{ post.published_date }}
             </div>
+            <div class="date postdate">
+              Posted by: <strong>{{ post.author }}</strong>
+            </div>
 
         {% else %}
             <a class="btn btn-default" href="{% url 'post_publish' pk=post.pk %}">Publish</a>
@@ -18,8 +21,10 @@
 
 
       {% if user.is_authenticated %}
+        {% ifequal request.user post.author %}
           <a class="btn btn-primary" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
           <a class="btn btn-primary" href="{% url 'post_remove' pk=post.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+        {% endifequal %}
       {% endif %}
 
 
@@ -32,16 +37,17 @@
   {% for comment in post.comments.all %}
   <br>
       {% if user.is_authenticated or comment.approve_comment %}
-
-              {{ comment.created_date }}
+        {% ifequal request.user comment.post.author %}
               {% if not comment.approve_comment %}
                   <a class="btn btn-default" href="{% url 'comment_remove' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
                   <a class="btn btn-default" href="{% url 'comment_approve' pk=comment.pk %}"><span class="glyphicon glyphicon-ok"></span></a>
               {% endif %}
-
+        {% endifequal %}
+        {% if request.user == comment.post.author or comment.approve_comment  %}
+          {{ comment.created_date }}
           <p>{{ comment.text|safe|linebreaks }}</p>
           <p>Posted by: <strong>{{ comment.author }}</strong></p>
-
+        {% endif %}
       {% endif %}
   {% empty %}
       <p>No comments posted.</p>
