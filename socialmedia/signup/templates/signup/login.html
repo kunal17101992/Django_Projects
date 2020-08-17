@@ -1,0 +1,20 @@
+{% extends 'signup/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<form action="{% url 'signin' %}" method="POST">
+  <br>
+  <br>
+  <h2>Please Login:</h2>
+  <br>
+  {% if msg %}
+    <p style="color:green;">{{ msg }}</p>
+  {% endif %}
+  {% csrf_token %}
+  {{ form|crispy }}
+  <small><a href="{% url 'password_reset' %}">Forgot Username/Password?</a></small>
+  <br>
+  <br>
+  <input type="submit" class="btn btn-success" name="" value="Login">
+  <small>Don't have account? <a href="{% url 'signup:sign_up' %}">Signup</a></small>
+</form>
+{% endblock %}

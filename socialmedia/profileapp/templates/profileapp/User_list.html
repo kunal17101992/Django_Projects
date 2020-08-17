@@ -1,0 +1,36 @@
+{% extends 'signup/base.html' %}
+{% load static %}
+{% block profile %}
+
+<div class="container">
+  <div class="row ml-4">
+{% for i in object_list %}
+<a href="{% url 'profileapp:otherprofile' i.id %}">
+<div class="card ml-4 my-3" style="width: 18rem;">
+{% if i.userprofile.Profile_photo %}
+  <img src="{{ i.userprofile.Profile_photo.url }}" class="card-img-top img-fluid" alt="..." style = "width:286px;height:286px;">
+{% else %}
+  <img class="card-img-top img-fluid" src="{% static 'image/default.jpg' %}" alt="" style = "width:286px;height:286px;">
+{% endif %}
+<div class="card-body">
+  <h5 id="xyz" class="card-title">{{ i.first_name }} {{ i.last_name }}</h5>
+  <p class="card-text">{{ i.email }}</p>
+  {% if i.id in friendsent_data %}
+  <a href="{% url 'profileapp:friendcancel' i.id %}" class="btn btn-warning mt-3">Cancel Request</a>
+  {% else %}
+  {% if i.id in friendget_data %}
+  <a href="{% url 'profileapp:friendapprove' i.id %}" class="btn btn-success mt-3">Approve Request</a>
+  <a href="{% url 'profileapp:friendcancel' i.id %}" class="btn btn-danger mt-3">Reject</a>
+  {% elif i.id in friend_data %}
+  <a href="{% url 'profileapp:friendcancel' i.id %}" class="btn btn-danger mt-3">Unfriend</a>
+  {% else %}
+  <a href="{% url 'profileapp:friendadd' i.id %}" class="btn btn-primary mt-3">Send Request</a>
+  {% endif %}
+  {% endif %}
+</div>
+</div>
+</a>
+{% endfor %}
+</div>
+</div>
+{% endblock %}

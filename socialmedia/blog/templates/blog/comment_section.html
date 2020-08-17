@@ -1,0 +1,67 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<div id="comment-button{{ i.pk }}">
+{% if i.comment_set.all.count > 0 %}
+<div class="col-12 text-left">
+    <a class="text-muted" id = "xyz" data-toggle="collapse" href="#collapsecomment{{ i.pk }}" role="button" aria-expanded="false" aria-controls="collapsecomment">
+      {% with total=i.comment_set.all.count %}
+        {{ total }} Comment{{ total|pluralize }}
+      {% endwith %}
+   </a>
+</div>
+{% endif %}
+<div class="col-12 text-right">
+    <a class="text-muted" id = "xyz" data-toggle="collapse" href="#collapseaddcomment{{ i.pk }}" role="button" aria-expanded="false" aria-controls="collapseaddcomment">
+      Add Comment
+   </a>
+</div>
+<div class="collapse" id="collapsecomment{{ i.pk }}">
+  <div class="card card-body">
+    {% for j in i.comment_set.filter.all.order_by|dictsortreversed:"Published_date" %}
+    <!-- <div id="comdel{{ j.pk }}" class="card card-body"> -->
+    <div class="">
+      <div class="row">
+      {% if j.commentuser.userprofile.Profile_photo %}
+        <img class="rounded-circle account-img my-1 ml-1" src="{{ j.commentuser.userprofile.Profile_photo.url }}" alt="" style="width:40px;height:40px;">
+      {% else %}
+        <img class="rounded-circle account-img my-1 ml-1" src="{% static 'image/default.jpg' %}" alt="" style="width:40px;height:40px;">
+      {% endif %}
+      <div>
+        <h6><strong class="ml-2 my-3"><a id = "xyz" href="{% url 'profileapp:otherprofile' j.commentuser_id %}">{{ j.commentuser.first_name }} {{ j.commentuser.last_name }}</a></strong></h6>
+        <small class="ml-2 text-muted">{{ j.Published_date }}</small>
+      </div>
+      <div class="ml-5">
+        {% if request.user == i.postuser and request.user != j.commentuser %}
+         <button id="butdel" value="{{i.pk}}-{{ j.pk }}" type="button" class="close" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+         </button>
+        {% endif %}
+        {% if request.user == j.commentuser %}
+         <button id="butdel" value="{{i.pk}}-{{ j.pk }}" type="button" class="close" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+         </button>
+        {% endif %}
+      </div>
+      </div>
+      <br>
+      <p>{{ j.Comment }}</p>
+    </div>
+    <!-- </div> -->
+    {% endfor %}
+  </div>
+</div>
+<div class="collapse" id="collapseaddcomment{{ i.pk }}">
+  <div class="card card-body">
+    <form id="comsubmit" value="{{ i.pk }}" action="{% url 'blog:comment' i.id %}" method="POST">
+      {% csrf_token %}
+      <div id="div_id_Comment" class="form-group">
+        <label for="id_Comment{{ i.pk }}" class=" requiredField">Comment<span class="asteriskField">*</span></label>
+        <div class="">
+          <textarea id="id_Comment{{ i.pk }}" name="Comment" cols="30" rows="2" class="textarea form-control" required></textarea>
+        </div>
+    </div>
+      <button class="btn btn-success" type="submit" name="button" >Post</button>
+    </form>
+  </div>
+</div>
+</div>

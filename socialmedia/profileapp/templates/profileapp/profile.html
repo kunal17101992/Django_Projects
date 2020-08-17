@@ -1,0 +1,75 @@
+{% extends 'signup/base.html' %}
+{% load static %}
+{% block profile %}
+<br>
+<div class="container">
+{% if userprofile.Profile_photo %}
+  <img class="rounded-circle account-img" src="{{ userprofile.Profile_photo.url }}" alt="" style="width:130px;height:150px;">
+{% else %}
+  <img class="rounded-circle account-img" src="{% static 'image/default.jpg' %}" alt="" style="width:130px;height:150px;">
+{% endif %}
+{% if request.user == userprofile.user  %}
+<a class = "btn btn-outline-primary ml-5" href="{% url 'profileapp:profileupdate' userprofile.id %}">Edit Profile</a>
+{% endif %}
+<strong class="ml-5">Friend{{ friendcount|pluralize }} - {{ friendcount }}</strong>
+<br>
+<br>
+  <div class="row">
+    <strong class="w-50">Name:</strong>
+    <p>{{ userprofile.user.first_name }} {{ userprofile.user.last_name }}</p>
+  </div>
+  <div class="row">
+    <strong class="w-50">Gender:</strong>
+    <p>{{ userprofile.Gender }}</p>
+  </div>
+  <div class="row">
+    <strong class="w-50">Email:</strong>
+    <p>{{ userprofile.user.email }}</p>
+  </div>
+  <div class="row">
+    <strong class="w-50">Date of Birth:</strong>
+    <p>{{ userprofile.Date_of_Birth }}</p>
+  </div>
+  <div class="row">
+    <strong class="w-50">Hometown:</strong>
+    <p>{{ userprofile.Location }}</p>
+  </div>
+  <div class="row">
+    <strong class="w-50">Status:</strong>
+    <p>{{ userprofile.Marital_Status }}</p>
+  </div>
+  <div class="row">
+    <strong class="w-50">Designation:</strong>
+    <p>{{ userprofile.Profession }}</p>
+  </div>
+  <div class="row">
+    <strong class="w-50">Organization:</strong>
+    <p>{{ userprofile.Company }}</p>
+  </div>
+  <div class="row">
+    <strong class="w-50">College:</strong>
+    <p>{{ userprofile.College_Name }}</p>
+  </div>
+  <div class="row">
+    <strong class="w-50">School:</strong>
+    <p>{{ userprofile.School_Name }}</p>
+  </div>
+  <div class="row">
+    <strong class="w-50">Contact:</strong>
+    <p>{{ userprofile.Contact_no }}</p>
+  </div>
+  <div class="row">
+    <strong class="w-50">Language:</strong>
+    <p>{{ userprofile.Language_known }}</p>
+  </div>
+  <div class="row">
+    <strong class="w-50">Religion:</strong>
+    <p>{{ userprofile.Religion }}</p>
+  </div>
+  <div class="row">
+    <a class = "btn btn-outline-primary" href="{% url 'signinhome' %}">Back</a>
+</div>
+<br>
+<br>
+</div>
+{% endblock %}

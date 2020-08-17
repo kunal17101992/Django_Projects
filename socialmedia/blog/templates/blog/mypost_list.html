@@ -1,0 +1,143 @@
+{% extends 'signup/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+  #xyz {
+    color:black;
+  }
+  .titlep{
+    color:#777473;
+  }
+ #w74 { word-wrap: break-word; }
+</style>
+    {% for i in object_list %}
+      <div class="container bg-light rounded">
+        <div class='my-3'>
+          <div class="row">
+          {% if i.postuser.userprofile.Profile_photo %}
+            <img class="rounded-circle account-img my-1 ml-1" src="{{ i.postuser.userprofile.Profile_photo.url }}" alt="" style="width:40px;height:40px;">
+          {% else %}
+            <img class="rounded-circle account-img my-1 ml-1" src="{% static 'image/default.jpg' %}" alt="" style="width:40px;height:40px;">
+          {% endif %}
+          <div>
+            <h6><strong class="ml-2 my-3"><a id = "xyz" href="{% url 'profileapp:otherprofile' i.postuser_id %}">{{ i.postuser.first_name }} {{ i.postuser.last_name }}</a></strong></h6>
+            <small class="ml-2 text-muted">{{ i.Published_date }}</small>
+          </div>
+          </div>
+          <div>
+              <br>
+              <h5 class="mb-2"><a class="titlep" href="{% url 'blog:postdetail' i.id %}">{{ i.Title }}</a></h5>
+          </div>
+          <div>
+            <div id="w74">
+              <p>
+                {{ i.Description|slice:"0:100" }}
+                  {% if i.Description|length > 100 %}
+                    <a href="{% url 'blog:postdetail' i.id %}">..continue reading</a>
+                  {% endif %}
+              </p>
+            </div>
+              {% if i.Upload_Image %}
+              <img class="img-fluid" src="{{ i.Upload_Image.url }}" alt="" style="width:520px;height:300px;"><br>
+              {% elif i.Upload_Video %}
+              <div class="embed-responsive embed-responsive-16by9"">
+              <video width=400 loop=True controls>
+              <source src="{{ i.Upload_Video.url }}" type="video/mp4">
+              Your browser does not support the video tag.
+              </video>
+              </div>
+              {% elif i.Upoad_file %}
+              <a href="{{ i.Upoad_file.url }}" target="_blank">{{ object.Upoad_file|cut:"files/" }}</a>
+              <br>
+              {% endif %}
+              <br>
+              <hr>
+              {% include "blog/like_section.html" %}
+
+              {% include "blog/comment_section.html" %}
+          </div>
+        </div>
+        <br>
+      </div>
+      {% empty %}
+        <h1 style="text-align: center; padding-top: 200px;" class="text-muted">No Posts to display</h1>
+    {% endfor %}
+
+<script type="text/javascript">
+  $(document).ready(function(event){
+    $(document).on('click', '#like', function(event){
+      event.preventDefault();
+      var pk = parseInt($(this).data("value"))
+      console.log(pk)
+      $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:8000/post/like/' + pk + '/',
+        data: {'id':pk, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        datatype: 'json',
+        success: function(response){
+          $('#like-button' + pk).html(response['form'])
+          console.log($('#like-button').html(response['form']));
+        },
+        error: function(rs, e){
+          console.log(rs.responseText);
+        }
+
+      });
+    })
+
+  })
+
+  $(document).ready(function(event){
+    $(document).on('submit', '#comsubmit', function(event){
+      event.preventDefault();
+      var pk = parseInt($(this).attr('value'))
+      console.log('id' + pk)
+      $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:8000/post/comment/' + pk,
+        data: {comment: $('#id_Comment' + pk).val(), 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        datatype: 'json',
+        success: function(response){
+          $('#comment-button' + pk).html(response['form'])
+          console.log($('#comment-button').html(response['form']));
+          console.log($('#id_Comment').val());
+        },
+        error: function(rs, e){
+          console.log(rs.responseText);
+        }
+
+      });
+    })
+  })
+
+  $(document).ready(function(event){
+    $(document).on('click', '#butdel', function(event){
+      event.preventDefault();
+      var st = $(this).attr("value");
+      var ln = st.length;
+      var inde = parseInt(st.indexOf('-'));
+      var ind = inde + 1
+      var ppk = parseInt(st.substring(0,inde));
+      var cpk = parseInt(st.substring(ind,ln));
+      console.log('cm' + ppk);
+      console.log('cm' + cpk);
+      $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:8000/post/comment/delete/' + cpk + '/',
+        data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        datatype: 'json',
+        success: function(response){
+          $('#comment-button' + ppk).html(response['form'])
+          console.log($('#comment-button').html(response['form']));
+        },
+        error: function(rs, e){
+          console.log(rs.responseText);
+        }
+
+      });
+    })
+
+  })
+
+</script>
+{% endblock %}

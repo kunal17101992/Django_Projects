@@ -1,0 +1,19 @@
+<div id="like-button{{ object.id }}">
+{% if object.id in like_data %}
+<div class="col-12">
+  <strong><a id="like" data-value="{{ object.id }}" class="text-success" href="{% url 'blog:postlikedetail' object.id %}">
+    {% with sum=object.postlike_set.all.count %}
+        {{ sum }} Like{{ sum|pluralize }}
+    {% endwith %}
+  </a></strong>
+</div>
+{% else %}
+<div class="col-12">
+  <a id="like" data-value="{{ object.id }}" class="text-muted" href="{% url 'blog:postlikedetail' object.id %}">
+    {% with sum=object.postlike_set.all.count %}
+        {{ sum }} Like{{ sum|pluralize }}
+    {% endwith %}
+  </a>
+</div>
+{% endif %}
+</div>

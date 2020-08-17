@@ -1,0 +1,22 @@
+{% extends 'signup/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <form action="{% url 'signup:sign_up' %}" method="POST">
+      <br>
+      <br>
+      <h2>Please fill the details:</h2>
+      <br>
+      {% if msg %}
+        <p style="color:green;">{{ msg }}</p>
+      {% endif %}
+      {% csrf_token %}
+      {{ form|crispy }}
+      <small>By clicking Sign Up, you agree to our <a href="#">Terms</a>, <a href="#"> Data Policy</a> and <a href="#">Cookie Policy</a>.</small>
+      <br>
+      <br>
+      <input type="submit" class="btn btn-success" name="" value="Signup">
+      <a href="{% url 'signin' %}">Back</a>
+      <br>
+      <br>
+    </form>
+{% endblock %}

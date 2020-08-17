@@ -1,0 +1,146 @@
+{% extends 'signup/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<style>
+  #xyz {
+    color:black;
+  }
+  .titlep{
+    color:#777473;
+  }
+ #w74 { word-wrap: break-word; }
+</style>
+<div class="container my-3 bg-light rounded">
+  <div class="row">
+  {% if object.postuser.userprofile.Profile_photo %}
+    <img class="rounded-circle account-img my-1 ml-1" src="{{ object.postuser.userprofile.Profile_photo.url }}" alt="" style="width:40px;height:40px;">
+  {% else %}
+    <img class="rounded-circle account-img my-1 ml-1" src="{% static 'image/default.jpg' %}" alt="" style="width:40px;height:40px;">
+  {% endif %}
+  <div>
+    <h6><strong class="ml-2 my-3"><a id = "xyz" href="{% url 'profileapp:otherprofile' object.postuser_id %}">{{ object.postuser.first_name }} {{ object.postuser.last_name }}</a></strong></h6>
+    <small class="ml-2 text-muted">{{ object.Published_date }}</small>
+  </div>
+  </div>
+  <br>
+<h5 class="mb-2">{{ object.Title }}</h5>
+<p id="w74">{{ object.Description }}</p>
+<br>
+{% if object.Upload_Image %}
+<img class="img-fluid" src="{{ object.Upload_Image.url }}" alt="" style="width:520px;height:300px;">
+<br>
+<br>
+{% endif %}
+{% if object.Upload_Video %}
+
+<div class="embed-responsive embed-responsive-16by9"">
+<video width=400 loop=True controls>
+<source src="{{ object.Upload_Video.url }}" type="video/mp4">
+Your browser does not support the video tag.
+</video>
+</div>
+<br>
+<br>
+{% endif %}
+{% if object.Upoad_file %}
+<a href="{{ object.Upoad_file.url }}" target="_blank">{{ object.Upoad_file|cut:"files/" }}</a>
+<br>
+{% endif %}
+
+<div class="row">
+{% include "blog/like_section_detail.html" %}
+
+  {% if object.comment_set.all.count > 0 %}
+  <div class="col-12 text-left">
+      <a class="text-muted" id = "xyz" data-toggle="collapse" href="#collapsecomment{{ object.pk }}" role="button" aria-expanded="false" aria-controls="collapsecomment">
+        {% with total=object.comment_set.all.count %}
+          {{ total }} Comment{{ total|pluralize }}
+        {% endwith %}
+     </a>
+  </div>
+  {% endif %}
+  <div class="col-12 text-right">
+      <a class="text-muted" id = "xyz" data-toggle="collapse" href="#collapseaddcomment{{ object.pk }}" role="button" aria-expanded="false" aria-controls="collapseaddcomment">
+        Add Comment
+     </a>
+  </div>
+
+</div>
+<div class="collapse" id="collapsecomment{{ object.pk }}">
+  <div class="card card-body">
+    {% for j in object.comment_set.filter.all.order_by|dictsortreversed:"Published_date" %}
+    <hr>
+    <div class="">
+      <div class="row">
+      {% if j.commentuser.userprofile.Profile_photo %}
+        <img class="rounded-circle account-img my-1 ml-1" src="{{ j.commentuser.userprofile.Profile_photo.url }}" alt="" style="width:40px;height:40px;">
+      {% else %}
+        <img class="rounded-circle account-img my-1 ml-1" src="{% static 'image/default.jpg' %}" alt="" style="width:40px;height:40px;">
+      {% endif %}
+      <div>
+        <h6><strong class="ml-2 my-3"><a id = "xyz" href="{% url 'profileapp:otherprofile' j.commentuser_id %}">{{ j.commentuser.first_name }} {{ j.commentuser.last_name }}</a></strong></h6>
+        <small class="ml-2 text-muted">{{ j.Published_date }}</small>
+      </div>
+      <div class="ml-5">
+        {% if request.user == object.postuser and request.user != j.commentuser %}
+         <button onclick="location.href='{% url "blog:commentdelete" j.pk %}'" type="button" class="close" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+         </button>
+        {% endif %}
+        {% if request.user == j.commentuser %}
+         <button onclick="location.href='{% url "blog:commentdelete" j.pk %}'" type="button" class="close" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+         </button>
+        {% endif %}
+      </div>
+      </div>
+      <br>
+      <p>{{ j.Comment }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<div class="collapse" id="collapseaddcomment{{ object.pk }}">
+  <div class="card card-body">
+    <form action="{% url 'blog:comment' object.id %}" method="POST">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <input class = "btn btn-outline-primary" type="submit" name="" value="Post">
+    </form>
+  </div>
+</div>
+<br>
+</div>
+{% if request.user == object.postuser  %}
+  <a class = "btn btn-outline-primary" href="{% url 'blog:postupdate' object.id %}">Update</a>
+  <a class = "btn btn-outline-danger" href="{% url 'blog:postdelete' object.id %}">Delete</a>
+{% endif %}
+<a class = "btn btn-outline-primary" href="{% url 'signinhome' %}">Back</a>
+
+<script type="text/javascript">
+  $(document).ready(function(event){
+    $(document).on('click', '#like', function(event){
+      event.preventDefault();
+      var pk = parseInt($(this).data("value"))
+      console.log(pk)
+      $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:8000/post/like/detail/' + pk + '/',
+        data: {'id':pk, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        datatype: 'json',
+        success: function(response){
+          $('#like-button' + pk).html(response['form'])
+          console.log($('#like-button').html(response['form']));
+        },
+        error: function(rs, e){
+          console.log(rs.responseText);
+        }
+
+      });
+    })
+
+  })
+
+</script>
+{% endblock %}

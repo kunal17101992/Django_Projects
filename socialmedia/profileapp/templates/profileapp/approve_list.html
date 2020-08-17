@@ -1,0 +1,28 @@
+{% extends 'signup/base.html' %}
+{% load static %}
+{% block profile %}
+
+<div class="container">
+  <div class="row ml-4">
+{% for i in a %}
+<a href="{% url 'profileapp:otherprofile' i.id %}">
+<div class="card ml-4 my-3" style="width: 18rem;">
+{% if i.frienduser2.userprofile.Profile_photo %}
+  <img src="{{ i.frienduser2.userprofile.Profile_photo.url }}" class="card-img-top img-fluid" alt="..." style = "width:286px;height:286px;">
+{% else %}
+  <img class="card-img-top img-fluid" src="{% static 'image/default.jpg' %}" alt="" style = "width:286px;height:286px;">
+{% endif %}
+<div class="card-body">
+  <h5 id="xyz" class="card-title">{{ i.frienduser2.first_name }} {{ i.frienduser2.last_name }}</h5>
+  <p class="card-text">{{ i.frienduser2.email }}</p>
+  <a href="{% url 'profileapp:friendapprove' i.frienduser2_id %}" class="btn btn-success mt-3">Approve Request</a>
+  <a href="{% url 'profileapp:friendcancel' i.frienduser2_id %}" class="btn btn-danger mt-3">Reject</a>
+</div>
+</div>
+</a>
+{% empty %}
+  <h1 style="text-align: center; padding-left:350px;padding-top: 200px;" class="text-muted">No Friend Request</h1>
+{% endfor %}
+</div>
+</div>
+{% endblock %}

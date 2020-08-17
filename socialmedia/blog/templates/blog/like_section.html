@@ -1,0 +1,65 @@
+<div id="like-button{{ i.id }}">
+{% if i.id in like_data %}
+<div class="col-12">
+  <strong><a id="like" data-value="{{ i.id }}" class="text-success" href="{% url 'blog:postlike' i.id %}">
+    {% with sum=i.postlike_set.all.count %}
+        {{ sum }} Like{{ sum|pluralize }}
+    {% endwith %}
+  </a></strong>
+</div>
+{% else %}
+<div class="col-12">
+  <a id="like" data-value="{{ i.id }}" class="text-muted" href="{% url 'blog:postlike' i.id %}">
+    {% with sum=i.postlike_set.all.count %}
+        {{ sum }} Like{{ sum|pluralize }}
+    {% endwith %}
+  </a>
+</div>
+{% endif %}
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- {% if like_flag %}
+<div id="like-button" class="col-4">
+  <strong><a id="like" data-value="{{ i.id }}" class="text-success" href="{% url 'blog:postlike' i.id %}">
+    {% with sum=i.postlike_set.all.count %}
+      {{ sum }} Like{{ sum|pluralize }}
+    {% endwith %}
+  </a></strong
+</div>
+{% else %}
+<div id="like-button" class="col-4">
+  <a id="like" data-value="{{ i.id }}" class="text-muted" href="{% url 'blog:postlike' i.id %}">
+    {% with sum=i.postlike_set.all.count %}
+      {{ sum }} Like{{ sum|pluralize }}
+    {% endwith %}
+  </a>
+</div>
+{% endif %} -->
+
+<!-- <div id="like-button" class="col-4">
+  <a id="like" data-value="{{ i.id }}" class="text-muted" href="{% url 'blog:postlike' i.id %}">
+    {% with sum=i.postlike_set.all.count %}
+      {{ sum }} Like{{ sum|pluralize }}
+    {% endwith %}
+  </a>
+</div> -->

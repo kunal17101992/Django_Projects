@@ -1,0 +1,10 @@
+{% extends 'signup/base.html' %}
+{% block content %}
+<form method="post">
+  {% csrf_token %}
+  <br>
+  <h3>Are you want to delete that post ? <h3 style="color:red;">"{{ object.Title }}"</h3></h3>
+  <input class = "btn btn-outline-danger" type="submit" name="" value="Confirm">
+  <a  class = "btn btn-outline-primary" href="{% url 'blog:postdetail' object.id %}">Back</a>
+</form>
+{% endblock %}
