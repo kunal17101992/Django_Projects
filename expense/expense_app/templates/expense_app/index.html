@@ -1,0 +1,190 @@
+{% extends 'expense/base.html' %}
+{% block chart %}
+<br>
+<div class="container container-sm">
+  <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12">
+    <canvas id="myChart"></canvas>
+  </div>
+</div>
+<br>
+<div class="container container-sm">
+  <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12">
+    <canvas id="myChart1"></canvas>
+  </div>
+</div>
+<br>
+
+<script>
+$(document).ready(function(){
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+          // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+          labels: [{% for i in exp %}'{{ i.Expense_date }}',{% endfor %}],
+          datasets: [{
+              label: 'Current Month DAY Wise Expense',
+              // data: [12, 19, 3, 5, 2, 3],
+              data: [{% for i in exp %}{{ i.daily_amount }},{% endfor %}],
+              backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 162, 1)',
+                  'rgba(54, 112, 235, 1)',
+                  'rgba(55, 206, 86, 1)',
+                  'rgba(575, 192, 192, 1)',
+                  'rgba(153, 102, 155, 1)',
+                  'rgba(255, 59, 64, 1)',
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 162, 1)',
+                  'rgba(54, 112, 235, 1)',
+                  'rgba(55, 206, 86, 1)',
+                  'rgba(575, 192, 192, 1)',
+                  'rgba(153, 102, 155, 1)',
+                  'rgba(255, 59, 64, 1)',
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 162, 1)',
+                  'rgba(54, 112, 235, 1)',
+                  'rgba(55, 206, 86, 1)',
+                  'rgba(575, 192, 192, 1)',
+                  'rgba(153, 102, 155, 1)',
+                  'rgba(255, 59, 64, 1)',
+                  'rgba(255, 59, 64, 1)'
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                  }
+              }]
+          }
+      }
+  });
+});
+</script>
+
+<script>
+$(document).ready(function(){
+  var ctx = document.getElementById('myChart1').getContext('2d');
+  var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+          // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+          labels: [{% for i in exp_sum %}'{{ i.Expense_category__name }}',{% endfor %}],
+          datasets: [{
+              label: 'Current Month CATEGORY Wise Expense',
+              // data: [12, 19, 3, 5, 2, 3],
+              data: [{% for i in exp_sum %}{{ i.Amount__sum }},{% endfor %}],
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)',
+                  'rgba(55, 99, 162, 0.2)',
+                  'rgba(54, 112, 235, 0.2)',
+                  'rgba(55, 206, 86, 0.2)',
+                  'rgba(575, 192, 192, 0.2)',
+                  'rgba(153, 102, 155, 0.2)',
+                  'rgba(255, 59, 64, 0.2)',
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)',
+                  'rgba(255, 99, 162, 0.2)',
+                  'rgba(54, 112, 235, 0.2)',
+                  'rgba(55, 206, 86, 0.2)',
+                  'rgba(575, 192, 192, 0.2)',
+                  'rgba(153, 102, 155, 0.2)',
+                  'rgba(255, 59, 64, 0.2)',
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)',
+                  'rgba(255, 99, 162, 0.2)',
+                  'rgba(54, 112, 235, 0.2)',
+                  'rgba(55, 206, 86, 0.2)',
+                  'rgba(575, 192, 192,0.2)',
+                  'rgba(153, 102, 155, 0.2)',
+                  'rgba(255, 59, 64, 0.2)',
+                  'rgba(255, 59, 64, 0.2)'
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 162, 1)',
+                  'rgba(54, 112, 235, 1)',
+                  'rgba(55, 206, 86, 1)',
+                  'rgba(575, 192, 192, 1)',
+                  'rgba(153, 102, 155, 1)',
+                  'rgba(255, 59, 64, 1)',
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 162, 1)',
+                  'rgba(54, 112, 235, 1)',
+                  'rgba(55, 206, 86, 1)',
+                  'rgba(575, 192, 192, 1)',
+                  'rgba(153, 102, 155, 1)',
+                  'rgba(255, 59, 64, 1)',
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 162, 1)',
+                  'rgba(54, 112, 235, 1)',
+                  'rgba(55, 206, 86, 1)',
+                  'rgba(575, 192, 192, 1)',
+                  'rgba(153, 102, 155, 1)',
+                  'rgba(255, 59, 64, 1)',
+                  'rgba(255, 59, 64, 1)'
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                  }
+              }]
+          }
+      }
+  });
+});
+</script>
+{% endblock %}

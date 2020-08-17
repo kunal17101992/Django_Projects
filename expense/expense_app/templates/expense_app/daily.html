@@ -1,0 +1,81 @@
+{% extends 'expense/base.html' %}
+{% block daily %}
+<div class="table-responsive-sm">
+<br>
+<h3><strong>{{ status }} Expense</strong>: {{ sum.Amount__sum }}</h3>
+<br>
+<h5 style="color:green;"><strong>Detailed Report:</strong></h5>
+<table class="table table-bordered table-hover table-striped table-sm">
+  <tr>
+    <th>Expense Category</th>
+    <th>Expense Name</th>
+    <th>Description</th>
+    <th>Expense Amount</th>
+    <th>Expense date</th>
+  </tr>
+  {% for i in exp %}
+  <tr>
+    <td>{{ i.Expense_category }}</td>
+    <td>{{ i.Expense_name }}</td>
+    <td>{{ i.Expense_description }}</td>
+    <td>{{ i.Amount }}</td>
+    <td>{{ i.Expense_date }}</td>
+  </tr>
+  {% endfor %}
+</table>
+<br>
+<h5 style="color:green;"><strong>Category Wise Report:</strong></h5>
+<table class="table table-bordered table-hover table-striped table-sm">
+  <tr>
+    <th>Expense Category</th>
+    <th>Amount</th>
+  </tr>
+  {% for i in exp_sum %}
+  <tr>
+    <td>{{ i.Expense_category__name }}</td>
+    <td>{{ i.Amount__sum }}</td>
+  </tr>
+  {% endfor %}
+</table>
+<br>
+<!-- {% if sum_month %}
+<hr style="border: 1px solid;">
+<h3><strong>Monthly Expense</strong>: {{ sum_month.Amount__sum }}</h3>
+<br>
+<h5 style="color:green;"><strong>Detailed Report:</strong></h5>
+<table>
+  <tr>
+    <th>Expense Category</th>
+    <th>Expense Name</th>
+    <th>Description</th>
+    <th>Expense Amount</th>
+    <th>Expense date</th>
+  </tr>
+  {% for i in exp_month %}
+  <tr>
+    <td>{{ i.Expense_category }}</td>
+    <td>{{ i.Expense_name }}</td>
+    <td>{{ i.Expense_description }}</td>
+    <td>{{ i.Amount }}</td>
+    <td>{{ i.Expense_date }}</td>
+  </tr>
+  {% endfor %}
+</table>
+<br>
+<h5 style="color:green;"><strong>Category Wise Report:</strong></h5>
+<table>
+  <tr>
+    <th>Expense Category</th>
+    <th>Amount</th>
+  </tr>
+  {% for i in exp_month_sum %}
+  <tr>
+    <td>{{ i.Expense_category__name }}</td>
+    <td>{{ i.Amount__sum }}</td>
+  </tr>
+  {% endfor %}
+</table>
+<br>
+{% endif %} -->
+</div>
+{% endblock %}

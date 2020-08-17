@@ -1,0 +1,32 @@
+{% extends 'expense/base.html' %}
+{% block daily %}
+<div class="table-responsive">
+<br>
+
+<h3><strong>{{ status }} Expense</strong>: {{ sum.Amount__sum }}</h3>
+<small style="color:red;">(Only Current month expenses are allowed to edit/delete)</small>
+<br>
+<table class="table table-bordered table-hover table-striped table-sm">
+  <tr>
+    <th>Expense Category</th>
+    <th>Expense Name</th>
+    <th>Description</th>
+    <th>Expense Amount</th>
+    <th>Expense date</th>
+    <th>Action</th>
+  </tr>
+  {% for i in exp %}
+  <tr>
+    <td>{{ i.Expense_category }}</td>
+    <td>{{ i.Expense_name }}</td>
+    <td>{{ i.Expense_description }}</td>
+    <td>{{ i.Amount }}</td>
+    <td>{{ i.Expense_date }}</td>
+    <td><a href="{% url 'expense_app:edit' i.id %}" class="btn btn-warning">Edit</a> <a href="{% url 'expense_app:delete' i.id %}" class="btn btn-danger ml-3">Delete</a></td>
+  </tr>
+  {% endfor %}
+</table>
+<br>
+<br>
+</div>
+{% endblock %}

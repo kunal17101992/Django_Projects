@@ -1,0 +1,143 @@
+{% extends 'expense/base.html' %}
+{% block chart %}
+<div class="">
+<div class="row">
+<div class="col-xm-4 col-sm-5 col-md-5 col-lg-5 ml-3">
+<div class="table-responsive-sm">
+<br>
+<h3><strong>Top FIVE Costly months:</strong></h3>
+<br>
+<table class="table table-bordered table-hover table-striped table-sm">
+  <tr>
+    <th>Month</th>
+    <th>Amount</th>
+  </tr>
+{% for i in exp %}
+  <tr>
+    <td>{{ i.Expense_date__month }}, {{ i.Expense_date__year }}</td>
+    <td>{{ i.month_amt }}</td>
+  </tr>
+{% endfor %}
+</table>
+</div>
+</div>
+<div class="col-xm-4 col-sm-5 col-md-5 col-lg-5">
+  <canvas id="myChart"></canvas>
+</div>
+</div>
+<div class="row">
+<div class="col-xm-4 col-sm-5 col-md-5 col-lg-5 ml-3">
+<div class="table-responsive-sm">
+<br>
+<h3><strong>Top SEVEN Costly categories:</strong></h3>
+<br>
+<table class="table table-bordered table-hover table-striped table-sm">
+  <tr>
+    <th>Category</th>
+    <th>Amount</th>
+  </tr>
+{% for i in exp_cat %}
+  <tr>
+    <td>{{ i.Expense_category__name }}</td>
+    <td>{{ i.cat_amt }}</td>
+  </tr>
+{% endfor %}
+</table>
+</div>
+</div>
+<div class="col-xm-4 col-sm-5 col-md-5 col-lg-5 mt-5">
+  <canvas id="myChart1"></canvas>
+</div>
+</div>
+</div>
+
+<script>
+$(document).ready(function(){
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+          // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+          labels: [{% for i in exp %}'{{ i.Expense_date__month }}, {{ i.Expense_date__year }}',{% endfor %}],
+          datasets: [{
+              label: 'Monthly Expense',
+              // data: [12, 19, 3, 5, 2, 3],
+              data: [{% for i in exp %}{{ i.month_amt }},{% endfor %}],
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)'
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                  }
+              }]
+          }
+      }
+  });
+});
+</script>
+
+<script>
+$(document).ready(function(){
+  var ctx = document.getElementById('myChart1').getContext('2d');
+  var myChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+          // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+          labels: [{% for i in exp_cat %}'{{ i.Expense_category__name }}',{% endfor %}],
+          datasets: [{
+              label: 'Day Wise Amount',
+              // data: [12, 19, 3, 5, 2, 3],
+              data: [{% for i in exp_cat %}{{ i.cat_amt }},{% endfor %}],
+              backgroundColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(102, 59, 164, 1)'
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(102, 59, 164, 0.2)'
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                  }
+              }]
+          }
+      }
+  });
+});
+</script>
+{% endblock %}

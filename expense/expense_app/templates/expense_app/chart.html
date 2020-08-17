@@ -1,0 +1,229 @@
+{% extends 'expense/base.html' %}
+{% block chart %}
+
+<div class="container container-sm">
+  <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12">
+    <canvas id="myChart"></canvas>
+  </div>
+</div>
+<br>
+<!-- <div class="container container-sm">
+  <div class="row">
+  <div class="col-xm-4 col-sm-6 col-md-6 col-lg-6">
+    <canvas id="myChart3" width="5" height="5"></canvas>
+  </div>
+  <div class="col-xm-4 col-sm-6 col-md-6 col-lg-6">
+    <canvas id="myChart4" width="5" height="5"></canvas>
+  </div>
+  </div>
+</div> -->
+
+<script>
+$(document).ready(function(){
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+          // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+          labels: [{% for i in exp %}'{{ i.Expense_date }}',{% endfor %}],
+          datasets: [{
+              label: 'Day Wise Amount',
+              // data: [12, 19, 3, 5, 2, 3],
+              data: [{% for i in exp %}{{ i.daily_amount }},{% endfor %}],
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)'
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+              ],
+              borderWidth: 1
+          },{
+              label: 'Wise Amount',
+              data: [6000, 8000, 4000, 15000, 20000, 18000,6000, 8000, 4000, 15000, 20000, 18000,6000, 8000, 4000, 15000, 20000, 18000],
+              //data: [{% for i in exp %}{{ i.daily_amount }},{% endfor %}],
+              // backgroundColor: [
+              //     'rgba(255, 99, 132, 0.2)',
+              //     'rgba(54, 162, 235, 0.2)',
+              //     'rgba(255, 206, 86, 0.2)',
+              //     'rgba(75, 192, 192, 0.2)',
+              //     'rgba(153, 102, 255, 0.2)',
+              //     'rgba(255, 159, 64, 0.2)'
+              // ],
+              borderColor: [
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                  }
+              }]
+          }
+      }
+  });
+});
+</script>
+
+
+<!-- <script>
+$(document).ready(function(){
+  var ctx = document.getElementById('myChart1').getContext('2d');
+  var myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+          // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+          labels: [{% for i in exp %}'{{ i.Expense_date }}',{% endfor %}],
+          datasets: [{
+              label: 'Day Wise Amount',
+              // data: [12, 19, 3, 5, 2, 3],
+              data: [{% for i in exp %}{{ i.daily_amount }},{% endfor %}],
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)'
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                  }
+              }]
+          }
+      }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+$(document).ready(function(){
+  var ctx = document.getElementById('myChart3').getContext('2d');
+  var myChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+          // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+          labels: [{% for i in exp %}'{{ i.Expense_date }}',{% endfor %}],
+          datasets: [{
+              label: 'Day Wise Amount',
+              // data: [12, 19, 3, 5, 2, 3],
+              data: [{% for i in exp %}{{ i.daily_amount }},{% endfor %}],
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)'
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                  }
+              }]
+          }
+      }
+  });
+});
+</script>
+
+
+<script>
+$(document).ready(function(){
+  var ctx = document.getElementById('myChart4').getContext('2d');
+  var myChart = new Chart(ctx, {
+      type: 'radar',
+      data: {
+          // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+          labels: [{% for i in exp %}'{{ i.Expense_date }}',{% endfor %}],
+          datasets: [{
+              label: 'Day Wise Amount',
+              // data: [12, 19, 3, 5, 2, 3],
+              data: [{% for i in exp %}{{ i.daily_amount }},{% endfor %}],
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)'
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                  }
+              }]
+          }
+      }
+  });
+});
+</script> -->
+{% endblock %}

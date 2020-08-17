@@ -1,0 +1,15 @@
+{% extends 'expense/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <form method="POST">
+      {% csrf_token %}
+      {% if msg %}
+      <div class="alert alert-success" role="alert">
+        {{ msg }}
+      </div>
+      {% endif %}
+      <br>
+       {{ form|crispy }}
+      <input type="submit" class="btn btn-success" name="" value="Submit">
+    </form>
+{% endblock %}
