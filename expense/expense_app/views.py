@@ -5,13 +5,52 @@ from django.views.generic import CreateView
 import datetime
 from django.db.models import Sum
 
+
+def month_last_day(dateinput):
+    fsd = datetime.date(dateinput.year, dateinput.month, 1)
+    tt = fsd + datetime.timedelta(days=32)
+    tt1 = datetime.date(tt.year,tt.month, 1)
+    lsd = tt1 - datetime.timedelta(days=1)
+
+    return lsd
+
+
 def index(request):
     td = datetime.date.today()
     msd = datetime.date(td.year,td.month,1)
     exp1 = expense.objects.filter(Expense_date__gte = msd, Expense_date__lte = td).values('Expense_date').annotate(daily_amount=Sum('Amount'))
-    exp = exp1.order_by('Expense_date')
-    exp_sum = expense.objects.filter(Expense_date__gte = msd, Expense_date__lte = td).values('Expense_category__name').annotate(Sum('Amount'))
-    return render(request, 'expense_app/index.html', {'exp':exp,'exp_sum':exp_sum})
+    exp_sum = []
+    a = {}
+    for i in expense_cat.objects.all():
+        b = i.expense_set.aggregate(Sum('Amount'))
+        b['cat'] = i.name
+        exp_sum.append(b)
+
+    for y in exp_sum:
+        if y['Amount__sum'] is None:
+            y['Amount__sum'] = 0
+
+    td = datetime.date.today()
+    fd = datetime.date(td.year,td.month,1)
+    ld = month_last_day(td)
+    exp = []
+    while fd <= td:
+        find = False
+        x = exp1.filter(Expense_date = fd)
+        for i in x:
+            exp.append(i)
+            find = True
+        if not find:
+            exp.append({'Expense_date':fd,'daily_amount':0})
+        fd = fd + datetime.timedelta(days=1)
+
+    currmonth = []
+    fd = datetime.date(td.year,td.month,1)
+    while fd <= ld:
+        currmonth.append(fd)
+        fd = fd + datetime.timedelta(days=1)
+
+    return render(request, 'expense_app/index.html', {'exp':exp,'exp_sum':exp_sum,'currmonth':currmonth})
 
 
 def AddExpense(request):
@@ -93,7 +132,13 @@ def PerformanceReport(request):
         n = 5
     exp = exp1.order_by('-month_amt')[:n]
     exp_cat = exp2.order_by('-cat_amt')[:7]
-    return render(request, 'expense_app/performance.html', {'exp':exp,'exp_cat':exp_cat})
+
+    a1 = expense.objects.values('Expense_category__name','Expense_date__year','Expense_date__month').annotate(Sum('Amount'))
+    a = a1.order_by('Expense_date__year','Expense_date__month')
+    b = expense.objects.order_by().values('Expense_date__year','Expense_date__month').distinct()
+    print(a)
+    print(b)
+    return render(request, 'expense_app/performance.html', {'exp':exp,'exp_cat':exp_cat, 'a':a, 'b':b})
 
 
 def DelExpenseCat(request):

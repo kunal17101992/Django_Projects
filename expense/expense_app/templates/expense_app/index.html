@@ -21,7 +21,8 @@ $(document).ready(function(){
       type: 'line',
       data: {
           // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-          labels: [{% for i in exp %}'{{ i.Expense_date }}',{% endfor %}],
+          labels: [{% for i in currmonth %}'{{ i }}',{% endfor %}],
+          //labels: {{ currmonth }},
           datasets: [{
               label: 'Current Month DAY Wise Expense',
               // data: [12, 19, 3, 5, 2, 3],
@@ -89,7 +90,7 @@ $(document).ready(function(){
       type: 'bar',
       data: {
           // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-          labels: [{% for i in exp_sum %}'{{ i.Expense_category__name }}',{% endfor %}],
+          labels: [{% for i in exp_sum %}'{{ i.cat }}',{% endfor %}],
           datasets: [{
               label: 'Current Month CATEGORY Wise Expense',
               // data: [12, 19, 3, 5, 2, 3],
